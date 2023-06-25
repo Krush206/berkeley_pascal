@@ -1,0 +1,6 @@
+h02opcs.h
+grammar.c
+token.c
+ytab.*
+*.err
+
