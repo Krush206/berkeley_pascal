@@ -19,7 +19,10 @@ extern yyerrflag;
 
 union semstack yyval;
 union semstack *yypv;
-yyactr(__np__){
+void
+yyactr(__np__)
+	int __np__;
+{
 	register union semstack *yyYpv;
 	register struct tnode *p, *q;
 	yyYpv = yypv;
@@ -53,15 +56,15 @@ case 11: constend(); break;
 case 12: typeend(); break;
 case 13: varend(); break;
 case 15: label(fixlist(yyYpv[2].tr_entry), lineof(yyYpv[1].i_entry)); break;
-case 16: yyval.tr_entry = newlist(yyYpv[1].i_entry == NIL ? TR_NIL :
+case 16: yyval.tr_entry = newlist(yyYpv[1].i_entry == (int) NIL ? TR_NIL :
 					(struct tnode *) *hash(yyYpv[1].cptr, 1)); break;
-case 17: yyval.tr_entry = addlist(yyYpv[1].tr_entry, yyYpv[3].i_entry == NIL ?
+case 17: yyval.tr_entry = addlist(yyYpv[1].tr_entry, yyYpv[3].i_entry == (int) NIL ?
 				TR_NIL : (struct tnode *) *hash(yyYpv[3].cptr, 1)); break;
 case 18: constbeg(yyYpv[1].i_entry, lineof(yyYpv[1].i_entry)),
 		  constant(lineof(yyYpv[3].i_entry), yyYpv[2].cptr, yyYpv[4].tr_entry); break;
 case 19: constant(lineof(yyYpv[3].i_entry), yyYpv[2].cptr, yyYpv[4].tr_entry); break;
 case 20: {
-			constbeg(yyYpv[1].i_entry);
+			constbeg(yyYpv[1].i_entry, lineof(yyYpv[1].i_entry));
 Cerror:
 			yyPerror("Malformed const declaration", PDECL);
 		  } break;
@@ -130,7 +133,7 @@ case 68: {
 		  } break;
 case 69: yyval.tr_entry = newlist(yyYpv[1].tr_entry); break;
 case 70: yyval.tr_entry = addlist(yyYpv[1].tr_entry, yyYpv[3].tr_entry); break;
-case 71: yyval.tr_entry = tree4(T_FLDLST, lineof(NIL), 
+case 71: yyval.tr_entry = tree4(T_FLDLST, 0, 
 				fixlist(yyYpv[1].tr_entry), yyYpv[2].tr_entry); break;
 case 72: yyval.tr_entry = newlist(yyYpv[1].tr_entry); break;
 case 73: yyval.tr_entry = addlist(yyYpv[1].tr_entry, yyYpv[3].tr_entry); break;
