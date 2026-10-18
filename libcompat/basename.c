@@ -72,6 +72,7 @@ __stdlibrary_has_basename(void)
 #ifdef MAIN
 #include <stdlib.h>
 #include <stdio.h>
+#include <libgen.h>
 
 int
 main(int argc, char *argv[])
