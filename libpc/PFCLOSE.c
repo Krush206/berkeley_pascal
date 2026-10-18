@@ -55,11 +55,18 @@ PFCLOSE(filep, lastuse)
 			fflush(filep->fbuf);
 			setbuf(filep->fbuf, NULL);
 		}
-		fclose(filep->fbuf);
+		/*
+		 * Check for a pending error BEFORE fclose; the stream is
+		 * freed by fclose and must not be referenced afterwards.
+		 */
 		if (ferror(filep->fbuf)) {
 			ERROR("%s: Close failed\n", filep->pfname);
-			return NULL;
+			fclose(filep->fbuf);
+			filep->fbuf = NULL;
+			_actfile[filep->fblk] = FILNIL;
+			return (filep->fchain);
 		}
+		fclose(filep->fbuf);
 		/*
 		 * Temporary files are discarded.
 		 */
