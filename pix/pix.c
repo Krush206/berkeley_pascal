@@ -50,20 +50,29 @@ static char sccsid[] = "@(#)pix.c	8.2 (Berkeley) 5/27/94";
 #include "whoami.h"
 #include "objfmt.h"
 #include "config.h"
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
+#include <signal.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <sys/wait.h>
 #define	ERRS	1
 
-char	argname[] = "-o/tmp/pixaXXXXX";
+char	argname[] = "-o/tmp/pixaXXXXXX";
 char	*name = &argname[2];
 
-int	onintr();
+void	onintr(int sig);
+int	dotted();
 
 #define ETXTBSY	26
 
+int
 main(argc, argv)
 	int argc;
 	char *argv[];
 {
-	register char **av;
 	register int ac;
 	int i, io, pid, status;
 //	extern errno;
@@ -78,33 +87,27 @@ main(argc, argv)
 	while (io >= 0 && io < 3);
 	for (io = 3; io < 15; io++)
 		close(io);
-	if ((signal(2, 1) & 01) == 0)
-		signal(2, onintr);
+	if (signal(SIGINT, SIG_IGN) != SIG_IGN)
+		signal(SIGINT, onintr);
 	for (ac = 1; ac < argc; ac++)
 		if (dotted(argv[ac], 'p')) {
 			ac++;
 			break;
 		}
-	mktemp(name);
-	for (;;) {
-		io = creat(name, 0400);
-		if (io > 0)
-			break;
-		if (name[8] == 'z') {
-			perror(name);
-			exit(1);
-		}
-		name[8]++;
+	io = mkstemp(name);
+	if (io < 0) {
+		perror(name);
+		exit(1);
 	}
 	pid = fork();
 	if (pid == -1) {
 		write(2, "No more processes\n", 18);
-		onintr();
+		onintr(0);
 	}
 	if (pid == 0) {
 		if (io != 3) {
 			write(2, "Impossible error in pix\n", 24);
-			onintr();
+			onintr(0);
 		}
 		argv[ac] = 0;
 		argv[0] = name - 2;
@@ -112,18 +115,18 @@ main(argc, argv)
 			execv(pi_comp, argv);
 		while (errno == ETXTBSY);
 		write(2, "Can't find pi\n", 14);
-		onintr();
+		onintr(0);
 	}
 	close(io);
 	do
 		i = wait(&status);
 	while (i != pid && i != -1);
 	if (i == -1 || (status & 0377))
-		onintr();
+		onintr(0);
 	if (status != 0) {
 		if ((status >> 8) == ERRS)
 			write(2, "Execution suppressed due to compilation errors\n", 47);
-		onintr();
+		onintr(0);
 	}
 	ac--;
 	argv[ac] = name;
@@ -134,9 +137,10 @@ main(argc, argv)
 		execv(px_debug, &argv[ac]);
 	while (errno == ETXTBSY);
 	write(2, "Can't find px\n", 14);
-	onintr();
+	onintr(0);
 }
 
+int
 dotted(cp, ch)
 	char *cp, ch;
 {
@@ -146,10 +150,11 @@ dotted(cp, ch)
 	return (i > 1 && cp[i - 2] == '.' && cp[i - 1] == ch);
 }
 
-onintr()
+void
+onintr(int sig)
 {
-
-	signal(2, 1);
+	(void) sig;
+	signal(SIGINT, SIG_IGN);
 	unlink(name);
 	exit(1);
 }
