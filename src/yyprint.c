@@ -111,7 +111,9 @@ tokname(tp , which )
 			break;
 		default:
 			if (tp->Yychar < 256) {
-				memcpy(buf, "'x'\0'x'\0'x'\0'x'", sizeof(buf));
+				static const char quads[] =
+				    "'x'\0'x'\0'x'\0'x'";
+				memcpy(buf, quads, sizeof(quads));
 				cp = buf;
 				/*
 				 * for four times reentrant code!
