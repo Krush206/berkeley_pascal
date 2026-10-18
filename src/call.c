@@ -119,9 +119,9 @@ call(p, argv_node, porf, psbn)
  	}
 #ifdef OBJ
 	    if (p->class == FFUNC || p->class == FPROC) {
- 		(void) put(2, O_LV | cbn << 8 + INDX ,
+ 		(void) put(2, O_LV | cbn << (8+INDX) ,
  			(int) savedispnp -> value[ NL_OFFS ]);
-		(void) put(2, PTR_RV | psbn << 8+INDX, (int)p->value[NL_OFFS]);
+		(void) put(2, PTR_RV | psbn << (8+INDX), (int)p->value[NL_OFFS]);
 	    }
 	    if (porf == FUNC) {
 		    /*
@@ -473,8 +473,8 @@ conf_err:			    if (p1->chain->type->class == CRANGE) {
 		return NLNIL;
 #ifdef OBJ
 	    if ( p -> class == FFUNC || p -> class == FPROC ) {
-		(void) put(2, PTR_RV | psbn << 8+INDX, (int)p->value[NL_OFFS]);
- 		(void) put(2, O_LV | cbn << 8 + INDX ,
+		(void) put(2, PTR_RV | psbn << (8+INDX), (int)p->value[NL_OFFS]);
+ 		(void) put(2, O_LV | cbn << (8+INDX) ,
  			(int) savedispnp -> value[ NL_OFFS ] );
 		(void) put(1, O_FCALL);
 		(void) put(2, O_FRTN, roundup(width(p->type), (long) A_STACK));
