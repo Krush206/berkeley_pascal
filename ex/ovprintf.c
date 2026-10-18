@@ -19,15 +19,17 @@ static char sccsid[] = "@(#)ovprintf.c	1.4 (Berkeley) 4/17/91";
 #undef putchar
 #endif
 
+int
 printf(fmt, args)
 char *fmt;
 {
 	_doprnt(fmt, &args, 0);
 }
 
+int
 _strout(string, count, adjust, file, fillch)
 register char *string;
-register count;
+register int count;
 int adjust;
 register struct _iobuf *file;
 {
