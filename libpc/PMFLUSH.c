@@ -64,8 +64,9 @@ PMFLUSH(cntrs, rtns, bufaddr)
 	if (ferror(filep))
 		goto ioerr;
 	fclose(filep);
-	if (!ferror(filep))
-		return;
+	return;
 ioerr:
+	if (filep != NULL)
+		fclose(filep);
 	perror(PXPFILE);
 }
