@@ -295,7 +295,7 @@ proc(r)
 					fmt = 'o'; /* APY, was 'O' */
 				else if (al->wexpr_node.expr3 ==
 						(struct tnode *) HEX)
-					fmt = 'X';
+					fmt = 'x';
 				else if (al->wexpr_node.expr3 != TR_NIL) {
 					/*
 					 * Evaluate second format spec
@@ -334,14 +334,14 @@ proc(r)
 						fmtspec += VARWIDTH;
 					}
 				}
-				if ((fmtspec & CONPREC) && prec < 0 ||
-				    (fmtspec & CONWIDTH) && field < 0) {
+				if (((fmtspec & CONPREC) && prec < 0) ||
+				    ((fmtspec & CONWIDTH) && field < 0)) {
 					error("Negative widths are not allowed");
 					continue;
 				}
 				if ( opt('s') &&
-				    ((fmtspec & CONPREC) && prec == 0 ||
-				    (fmtspec & CONWIDTH) && field == 0)) {
+				    (((fmtspec & CONPREC) && prec == 0) ||
+				    ((fmtspec & CONWIDTH) && field == 0))) {
 					standard();
 					error("Zero widths are non-standard");
 				}
@@ -563,7 +563,7 @@ proc(r)
 					soffset = sizes[cbn].curtmps;
 					tempnlp = tmpalloc((long) (sizeof(long)),
 						nl+T4INT, REGOK);
-					(void) put(2, O_LV | cbn << 8 + INDX,
+					(void) put(2, O_LV | cbn << (8+INDX),
 					    tempnlp -> value[ NL_OFFS ] );
 				}
 				ap = stkrval(al->wexpr_node.expr2, NLNIL, (long) RREQ );
@@ -582,13 +582,13 @@ proc(r)
 					if (fmtspec == VARWIDTH) {
 						fmt = 'e';
 						(void) put(1, O_AS4);
-						(void) put(2, O_RV4 | cbn << 8 + INDX,
+						(void) put(2, O_RV4 | cbn << (8+INDX),
 						    tempnlp -> value[NL_OFFS] );
 					        (void) put(3, O_MAX,
 						    5 + EXPOSIZE + REALSPC, 1);
 						convert(nl+T4INT, INT_TYP);
 						stkcnt += sizeof(int);
-						(void) put(2, O_RV4 | cbn << 8 + INDX,
+						(void) put(2, O_RV4 | cbn << (8+INDX),
 						    tempnlp->value[NL_OFFS] );
 						fmtspec += VARPREC;
 						tmpfree(&soffset);
@@ -597,7 +597,7 @@ proc(r)
 					break;
 				case TSTR:
 					(void) put(1, O_AS4);
-					(void) put(2, O_RV4 | cbn << 8 + INDX,
+					(void) put(2, O_RV4 | cbn << (8+INDX),
 					    tempnlp -> value[ NL_OFFS ] );
 					(void) put(3, O_MAX, strnglen, 0);
 					break;
@@ -653,7 +653,7 @@ proc(r)
 				(void) put(1, O_FILE);
 				(void) put(2, CON_INT, 1);
 				if (strfmt & VARWIDTH) {
-					(void) put(2, O_RV4 | cbn << 8 + INDX ,
+					(void) put(2, O_RV4 | cbn << (8+INDX) ,
 					    tempnlp -> value[ NL_OFFS ] );
 					(void) put(2, O_MIN, strnglen);
 					convert(nl+T4INT, INT_TYP);
