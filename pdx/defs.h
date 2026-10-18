@@ -71,7 +71,7 @@
 #pragma warning(disable:4996) // 'xxx': The POSIX name for this item is deprecated.
 #endif
 
-#include "..\src\common.h"	/* command definitions */
+#include "../src/common.h"	/* command definitions */
 
 #define LOCAL			static
 #ifndef NIL
