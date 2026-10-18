@@ -123,10 +123,12 @@ px_main(int argc, const char **argv)
 		_mode = PX;
 		if (_pcargc <= 1)
 			file = "obj";
-		else {
-			_pcargv++; _pcargc--; /* strip 'px' */
-		}
 		name = file;
+		/*
+		 * Berkeley px leaves the full argv (including the
+		 * interpreter name and the obj file name) visible to
+		 * the interpreted program via argc/argv.
+		 */
 	} else { /* embedded */
 		_mode = PX;
 		if (_pcargc <= 1)
@@ -272,6 +274,12 @@ complete(int code)
 		fputc('.',stderr);
 		fputc('\n',stderr);
 	}
+	/*
+	 * Flush the program's output before printing the statistics
+	 * line so the stats always appear after the program's output
+	 * (stderr is unbuffered, stdout is block buffered).
+	 */
+	fflush(stdout);
 	px_stats();
 	PFLUSH();
 }
@@ -292,7 +300,7 @@ compare(const char *arg0, const char *name)
 #if defined(unix)
 	const char *p;
 
-	if ((p = strrchr(argv, '/')) != NULL) /* strip path */
+	if ((p = strrchr(arg0, '/')) != NULL) /* strip path */
 		arg0 = p + 1;
 	return (strcmp(arg0, name) == 0 ? 1 : 0);
 
