@@ -27,6 +27,11 @@
 
 #if defined(unix)
 #include <unistd.h>
+#include <sys/wait.h>		/* wait */
+#include <sys/resource.h>	/* getrusage, RUSAGE_SELF */
+#ifndef tell
+#define tell(fd)		lseek((fd), 0L, SEEK_CUR)
+#endif
 #else
 #include <process.h>
 #include <io.h>
