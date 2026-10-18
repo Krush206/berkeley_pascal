@@ -223,7 +223,7 @@ gen(p, o, w1, w2)
 			}
 			op = arop[o];
 			if (op == O_REL2) {
-				(void) put(1, (op + reltab[i]) | (o - T_EQ) << 8+INDX);
+				(void) put(1, (op + reltab[i]) | (o - T_EQ) << (8+INDX));
 				return (nl+TBOOL);
 			}
 			(void) put(1, i == 15 ? ar8op[o-T_DIVD] : op | artab[i]);
@@ -231,12 +231,12 @@ gen(p, o, w1, w2)
 		case TREC:
 		case TSTR:
 //		case TSTR2:
-			(void) put(2, O_RELG | (o - T_EQ) << 8+INDX, w1);
+			(void) put(2, O_RELG | (o - T_EQ) << (8+INDX), w1);
 			return (nl+TBOOL);
 		case TSET:
 			op = setop[o-T_MULT];
 			if (op == O_RELT)
-				op |= (o - T_EQ)<<8+INDX;
+				op |= (o - T_EQ)<< (8+INDX);
 			(void) put(2, op, w1);
 			return (o >= T_EQ ? nl+TBOOL : nl+TSET);
 	}
