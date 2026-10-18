@@ -78,6 +78,7 @@ static char sccsid[] = "@(#)savenl.c	8.2 (Berkeley) 5/24/94";
 #include "0.h"
 #include "objfmt.h"
 
+#include <unistd.h>		/* mkstemp, close */
 struct nlhdr    nlhdr = {0};
 
 LOCAL char     symname[]    = "/tmp/obj.symXXXXXX";
@@ -124,10 +125,18 @@ startnlfile()
 	linesfp = fopen(t_linesname, "wb");
 	
 #else
-	(void) mktemp(symname);
-	(void) mktemp(strname);
-	(void) mktemp(filesname);
-	(void) mktemp(linesname);
+	{
+	    int symfd, strfd, filesfd, linesfd;
+
+	    symfd = mkstemp(symname);
+	    if (symfd >= 0) close(symfd); else symname[0] = 0;
+	    strfd = mkstemp(strname);
+	    if (strfd >= 0) close(strfd); else strname[0] = 0;
+	    filesfd = mkstemp(filesname);
+	    if (filesfd >= 0) close(filesfd); else filesname[0] = 0;
+	    linesfd = mkstemp(linesname);
+	    if (linesfd >= 0) close(linesfd); else linesname[0] = 0;
+	}
 	
 	symfp = fopen(symname, "wb");
 	strfp = fopen(strname, "wb");
