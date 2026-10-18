@@ -148,7 +148,7 @@ lvalue(var, modflag, required)
 			 * of the WITHPTR or REF
 			 * as the base of our lvalue
 			 */
-			(void) put(2, PTR_RV | bn << 8+INDX , (int)p->value[0] );
+			(void) put(2, PTR_RV | bn << (8+INDX) , (int)p->value[0] );
 			f = 0;		/* have an lv on stack */
 			o = 0;
 			break;
@@ -204,7 +204,7 @@ lvalue(var, modflag, required)
 				}
 				if (f) {
 				    if (p->class == FILET && bn != 0)
-				        (void) put(2, O_LV | bn <<8+INDX , o );
+				        (void) put(2, O_LV | bn << (8+INDX) , o );
 				    else
 					/*
 					 * this is the indirection from
@@ -224,7 +224,7 @@ lvalue(var, modflag, required)
 					 * global variable is the same as
 					 * an LV of a non-global one ?!?
 					 */
-				        (void) put(2, PTR_RV | bn <<8+INDX , o );
+				        (void) put(2, PTR_RV | bn << (8+INDX) , o );
 				} else {
 					if (o) {
 					    (void) put(2, O_OFF, o);
@@ -263,9 +263,9 @@ lvalue(var, modflag, required)
 						 * referenced through pointers
 						 * on the stack
 						 */
-						(void) put(2, PTR_RV | bn<<8+INDX, o);
+						(void) put(2, PTR_RV | bn<< (8+INDX), o);
 					else
-						(void) put(2, O_LV | bn<<8+INDX, o);
+						(void) put(2, O_LV | bn<< (8+INDX), o);
 				} else {
 					if (o) {
 					    (void) put(2, O_OFF, o);
@@ -338,9 +338,9 @@ lvalue(var, modflag, required)
 			 * global variables are referenced through
 			 * pointers on the stack
 			 */
-			(void) put(2, PTR_RV | bn<<8+INDX, o);
+			(void) put(2, PTR_RV | bn<< (8+INDX), o);
 		else
-			(void) put(2, O_LV | bn<<8+INDX, o);
+			(void) put(2, O_LV | bn<< (8+INDX), o);
 	} else {
 		if (o) {
 		    (void) put(2, O_OFF, o);
@@ -570,16 +570,16 @@ putcbnds(ctype, i)
 {
 	switch(width(ctype->type)) {
 	    case 1:
-		put(2, O_RV1 | (ctype->nl_block & 037) << 8+INDX,
+		put(2, O_RV1 | (ctype->nl_block & 037) << (8+INDX),
 			(int)ctype->nptr[i]->value[0]);
 		break;
 	    case 2:
-		put(2, O_RV2 | (ctype->nl_block & 037) << 8+INDX,
+		put(2, O_RV2 | (ctype->nl_block & 037) << (8+INDX),
 			(int)ctype->nptr[i]->value[0]);
 		break;
 	    case 4:
 	    default:
-		put(2, O_RV4 | (ctype->nl_block & 037) << 8+INDX,
+		put(2, O_RV4 | (ctype->nl_block & 037) << (8+INDX),
 			(int)ctype->nptr[i]->value[0]);
 	}
 }
