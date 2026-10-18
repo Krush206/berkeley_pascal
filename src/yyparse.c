@@ -47,7 +47,7 @@ static char sccsid[] = "@(#)yyparse.c	8.1 (Berkeley) 6/6/93";
  */
 extern int           yystate;             /* Current parser state */
 extern union         semstack *yypv;
-extern unsigned      yytshifts = 1;       /* Number of "true" shifts */
+unsigned      yytshifts = 1;       /* Number of "true" shifts */
 
 /*
  * Parse Tables
