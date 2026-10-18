@@ -99,11 +99,13 @@ myctime(tv)
 	dp = mycbuf;
 	cp = cpp;
 	cpp[16] = 0;
-	while (*dp++ = *cp++);
+	while ((*dp++ = *cp++))
+		continue;
 	dp--;
 	cp = cpp+19;
 	cpp[24] = 0;
-	while (*dp++ = *cp++);
+	while ((*dp++ = *cp++))
+		continue;
 	return (mycbuf);
 }
 
@@ -173,7 +175,7 @@ pstrcpy(s1, s2)
 	register char *os1;
 
 	os1 = s1;
-	while (*s1++ = *s2++)
+	while ((*s1++ = *s2++))
 		continue;
 	return (os1);
 }
