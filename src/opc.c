@@ -47,7 +47,7 @@ static char sccsid[] = "@(#)opc.c	8.1 (Berkeley) 6/6/93";
 #include <string.h>
 #include <assert.h>
 
-void main() {
+int main() {
 	char value[20+1] = {0};
 	register int i;
 		    
