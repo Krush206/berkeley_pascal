@@ -238,17 +238,19 @@ gotoop(s)
 		putdot( filename , line );
 	    }
 #endif /*PC*/
-	if (bn == cbn)
+	if (bn == cbn) {
 		if (p->nl_flags & NFORWD) {
 			if (p->value[NL_GOLEV] == NOTYET) {
 				p->value[NL_GOLEV] = level;
 				p->value[NL_GOLINE] = line;
 			}
-		} else
+		} else {
 			if (p->value[NL_GOLEV] == DEAD) {
 				recovered();
 				error("Goto %s is into a structured statement", p->symbol);
 			}
+		}
+	}
 }
 
 
