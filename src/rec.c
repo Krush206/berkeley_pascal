@@ -387,13 +387,13 @@ rec_offsets(recp, offset)
     if (origin != offset) {
 	fprintf(stderr,
 		"[rec_offsets] offset=%d recp->align_info=%d origin=%d\n",
-		offset, recp->align_info, origin);
+		(int) offset, (int) recp->align_info, (int) origin);
 	panic("rec_offsets");
     }
     DEBUG_RECORDS(
 	fprintf(stderr,
 	    "[rec_offsets] offset %d recp->align %d origin %d\n",
-	    offset, recp->align_info, origin));
+	    (int) offset, (int) recp->align_info, (int) origin));
 	/*
 	 *	fixed fields are forward linked though ->ptr[NL_FIELDLIST]
 	 *	give them all suitable offsets.
@@ -405,7 +405,7 @@ rec_offsets(recp, offset)
 	fieldnlp->value[NL_OFFS] = origin;
 	DEBUG_RECORDS(
 	    fprintf(stderr,"[rec_offsets] symbol %s origin %d\n",
-		    fieldnlp->symbol, origin));
+		    fieldnlp->symbol, (int) origin));
 	origin += lwidth(fieldnlp->type);
     }
 	/*
@@ -424,7 +424,7 @@ rec_offsets(recp, offset)
 	    origin = roundup((int) origin,(long) align(fieldnlp->type));
 	    fieldnlp->value[NL_OFFS] = origin;
 	    DEBUG_RECORDS(fprintf(stderr,"[rec_offsets] tag %s origin %d\n",
-				    fieldnlp->symbol, origin));
+				    fieldnlp->symbol, (int) origin));
 	    origin += lwidth(fieldnlp->type);
 	}
 	    /*
@@ -437,11 +437,11 @@ rec_offsets(recp, offset)
 	    DEBUG_RECORDS(
 		fprintf(stderr,
 			"[rec_offsets] maxing variant %d align_info %d\n",
-			varntnlp->value[0], vrecnlp->align_info));
+			(int) varntnlp->value[0], (int) vrecnlp->align_info));
 	    origin = roundup((int) origin,(long) vrecnlp->align_info);
 	}
 	DEBUG_RECORDS(
-	    fprintf(stderr, "[rec_offsets] origin of variants %d\n", origin));
+	    fprintf(stderr, "[rec_offsets] origin of variants %d\n", (int) origin));
 	    /*
 	     *	assign offsets to fields of records of the variants
 	     *	keep maximum length of the current record.
