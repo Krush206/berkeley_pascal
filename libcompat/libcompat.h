@@ -5,7 +5,11 @@
 //  libcompat
 //
 
+#if defined(_WIN32)
 #include "w32config.h"
+#else
+#include "config.h"
+#endif
 
 #if defined(LIBCOMPAT_SOURCE)
 #if !defined(_CRT_SECURE_NO_WARNINGS)
