@@ -60,6 +60,7 @@ static char sccsid[] = "@(#)main.c	8.2 (Berkeley) 5/24/94";
 char	piusage[]	= "pi [ -blnpstuw ] [ -i file ... ] name.p";
 char	*usageis	= piusage;
 
+
 #ifdef OBJ
 char	pixusage[]	= "pix [ -blnpstuw ] [ -i file ... ] name.p [ arg ... ]";
 char	*obj		= "obj";
@@ -92,7 +93,7 @@ double	XMININT		= -2147483648.;
  *
  * Process options, then call yymain to do all the real work.
  */
-void
+int
 main(int argc, char *argv[])
 {
 	register char *cp;
@@ -133,7 +134,7 @@ main(int argc, char *argv[])
 		if (i == -1)
 			goto usage;
 		if (i == 0) {
-			execl("/bin/cat", "cat", how_file, 0);
+			execl("/bin/cat", "cat", how_file, (char *)NULL);
 			goto usage;
 		}
 		while (wait(&i) != -1)
@@ -152,7 +153,7 @@ main(int argc, char *argv[])
 			cp = argv[0];
 			if (*cp++ != '-')
 				break;
-			while (c = *cp++) switch (c) {
+			while ((c = *cp++)) switch (c) {
 		#ifdef DEBUG
 				case 'k':	/*  code dump */
 				case 'r':           
