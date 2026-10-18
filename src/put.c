@@ -616,7 +616,7 @@ listnames(ap)
 #ifdef PC
                 putprintf( "        .word %d" , 0 , len );
 #endif
-        } while (next = next->chain);
+        } while ((next = next->chain));
         /* list of scalar names */
         strptr = getnext(ap, &next);
 
@@ -850,7 +850,7 @@ patchfil(loc, jmploc, words)
                 panic("patchfil");
 #ifdef DEBUG
         if (opt('k'))
-                printf("\tpatch %u 0x%lx/%ld\n", loc - HEADER_BYTES, jmploc, jmploc);
+                printf("\tpatch %u 0x%lx/%ld\n", (unsigned)(loc - HEADER_BYTES), jmploc, jmploc);
 #endif
         val = (short)jmploc;
         do {
@@ -961,7 +961,7 @@ dumphex(pos, pBuffer, bcnt)
         {
                 if (lpos == 0)
                 {
-                        idx = sprintf(hex, "0x%04X ", pos);
+                        idx = sprintf(hex, "0x%04lX ", (long)pos);
                         col = 0;
                 }
 
