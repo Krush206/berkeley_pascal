@@ -45,7 +45,7 @@ static char sccsid[] = "@(#)pic.c	8.1 (Berkeley) 6/6/93";
 #include <stdlib.h>
 #include "OPnames.h"
 
-void main() {
+int main() {
 	register int j, k;
 
 	for(j = 0;  j < 32;  j++) {
