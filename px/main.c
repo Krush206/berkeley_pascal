@@ -7,10 +7,11 @@
 #include "whoami.h"
 #include "px.h"
 
-void
+int
 main(argc, argv)
 	int argc;
 	char **argv;
 {
 	px_main(argc, argv);
+	return (0);
 }
