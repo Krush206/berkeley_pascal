@@ -306,7 +306,7 @@ funcend(fp, bundle, endline)
                          (void) put(2, O_CON24, i);
                          (void) put(2, O_LVCON, i);
                          putstr(p->symbol, 0);
-                         (void) put(2, O_LV | bn<<8+INDX, (int)iop->value[NL_OFFS]);
+                         (void) put(2, O_LV | bn<< (8+INDX), (int)iop->value[NL_OFFS]);
                          (void) put(1, O_DEFNAME);
 #                    endif /*OBJ*/
 #                    ifdef PC
