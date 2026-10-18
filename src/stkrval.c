@@ -440,19 +440,19 @@ struct nl
 	w = width(q);
 	switch (w) {
 	case 8:
-		(void) put(2, O_RV8 | bn << 8+INDX, (int)p->value[0]);
+		(void) put(2, O_RV8 | bn << (8+INDX), (int)p->value[0]);
 		break;
 	case 4:
-		(void) put(2, O_RV4 | bn << 8+INDX, (int)p->value[0]);
+		(void) put(2, O_RV4 | bn << (8+INDX), (int)p->value[0]);
 		break;
 	case 2:
-		(void) put(2, O_RV24 | bn << 8+INDX, (int)p->value[0]);
+		(void) put(2, O_RV24 | bn << (8+INDX), (int)p->value[0]);
 		break;
 	case 1:
-		(void) put(2, O_RV14 | bn << 8+INDX, (int)p->value[0]);
+		(void) put(2, O_RV14 | bn << (8+INDX), (int)p->value[0]);
 		break;
 	default:
-		(void) put(3, O_RV | bn << 8+INDX, (int)p->value[0], w);
+		(void) put(3, O_RV | bn << (8+INDX), (int)p->value[0], w);
 		break;
 	}
 	return (q);
