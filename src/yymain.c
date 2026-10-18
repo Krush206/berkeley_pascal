@@ -49,6 +49,22 @@ static char sccsid[] = "@(#)yymain.c	8.2 (Berkeley) 5/24/94";
 #include <signal.h>
 #include <config.h>
 
+/*
+ * The Berkeley a.out header uses "a_magic" etc.; the Linux <a.out.h>
+ * names the first field "a_info".  The obj file format is the BSD one,
+ * so we keep a private BSD-layout header for reading/writing it.
+ */
+struct bsd_exec {
+	long	a_magic;	/* magic number */
+	long	a_text;		/* size of text segment */
+	long	a_data;		/* size of initialized data */
+	long	a_bss;		/* size of uninitialized data */
+	long	a_syms;		/* size of symbol table */
+	long	a_entry;	/* entry point */
+	long	a_trsize;	/* size of text relocation */
+	long	a_drsize;	/* size of data relocation */
+};
+
 
 #ifdef PXP
 static void		copyfile();
@@ -180,7 +196,7 @@ copyfile()
 
 #ifdef PI
 #ifdef OBJ
-static struct exec magichdr = {0};
+static struct bsd_exec magichdr = {0};
 
 static void
 magic()
@@ -200,7 +216,7 @@ magic()
 
 	hf = open(px_header, O_BINARY);
 	if (hf >= 0) {
-	    if (read(hf, (char *) buf, HEADER_BYTES) > sizeof(struct exec)) {
+	    if (read(hf, (char *) buf, HEADER_BYTES) > sizeof(struct bsd_exec)) {
 			magichdr.a_magic  = ubuf[0];
 			magichdr.a_text   = ubuf[1];
 			magichdr.a_data   = ubuf[2];
@@ -209,11 +225,34 @@ magic()
 			magichdr.a_entry  = ubuf[5];
 			magichdr.a_trsize = ubuf[6];
 			magichdr.a_drsize = ubuf[7];
-			for (i = 0; i < HEADER_BYTES / sizeof(short); i++)
-				word(buf[i]);
-		}
-		(void) close(hf);
+	    }
+	    (void) close(hf);
 	}
+	/*
+	 * px_header is a native ELF binary on this port, not a BSD a.out,
+	 * so its header fields are not usable as a template.  Use default
+	 * BSD a.out values; magic2() fills in the real sizes later.
+	 */
+	if (magichdr.a_magic != 0407) {
+		magichdr.a_magic  = 0407;
+		magichdr.a_text   = 0;
+		magichdr.a_data   = 0;
+		magichdr.a_bss    = 0;
+		magichdr.a_syms   = 0;
+		magichdr.a_entry  = 0;
+		magichdr.a_trsize = 0;
+		magichdr.a_drsize = 0;
+	}
+	ubuf[0] = magichdr.a_magic;
+	ubuf[1] = magichdr.a_text;
+	ubuf[2] = magichdr.a_data;
+	ubuf[3] = magichdr.a_bss;
+	ubuf[4] = magichdr.a_syms;
+	ubuf[5] = magichdr.a_entry;
+	ubuf[6] = magichdr.a_trsize;
+	ubuf[7] = magichdr.a_drsize;
+	for (i = 0; i < HEADER_BYTES / sizeof(short); i++)
+		word(buf[i]);
 #endif
 }
 #endif /*OBJ*/
@@ -235,7 +274,7 @@ magic2()
 #endif
 	pflush();
 	magichdr.a_data = (unsigned) lc - magichdr.a_text;
-	magichdr.a_data -= sizeof(struct exec);
+	magichdr.a_data -= sizeof(struct bsd_exec);
 	pxhd.objsize    = ((unsigned) lc) - HEADER_BYTES;
 	pxhd.symtabsize = nlhdrsize();
 	magichdr.a_data += pxhd.symtabsize;
@@ -252,9 +291,9 @@ magic2()
 	(void) lseek(ofil, 0l, 0);
 #ifdef DEBUG
 	if (opt('x'))
-		dumphex(tell(ofil), &magichdr, sizeof(struct exec));
+		dumphex(tell(ofil), &magichdr, sizeof(struct bsd_exec));
 #endif
-	write(ofil, (char *) (&magichdr), sizeof(struct exec));
+	write(ofil, (char *) (&magichdr), sizeof(struct bsd_exec));
 	if (lseek(ofil, (off_t)(HEADER_BYTES - sizeof(pxhd)), 0) == -1) {
 		fprintf(stderr, "magic2: lseek\n");
 		pexit(ERRS);
