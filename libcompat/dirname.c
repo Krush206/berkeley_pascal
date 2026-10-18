@@ -131,6 +131,7 @@ __stdlibrary_has_dirname(void)
 #ifdef MAIN
 #include <stdlib.h>
 #include <stdio.h>
+#include <libgen.h>
 
 int
 main(int argc, char *argv[])
