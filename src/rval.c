@@ -175,23 +175,23 @@ rvalue(r, contype, required)
 				w = width(q);
 				switch (w) {
 				    case 8:
-					(void) put(2, O_RV8 | bn << 8+INDX,
+					(void) put(2, O_RV8 | bn << (8+INDX),
 						(int)p->value[0]);
 					break;
 				    case 4:
-					(void) put(2, O_RV4 | bn << 8+INDX,
+					(void) put(2, O_RV4 | bn << (8+INDX),
 						(int)p->value[0]);
 					break;
 				    case 2:
-					(void) put(2, O_RV2 | bn << 8+INDX,
+					(void) put(2, O_RV2 | bn << (8+INDX),
 						(int)p->value[0]);
 					break;
 				    case 1:
-					(void) put(2, O_RV1 | bn << 8+INDX,
+					(void) put(2, O_RV1 | bn << (8+INDX),
 						(int)p->value[0]);
 					break;
 				    default:
-					(void) put(3, O_RV | bn << 8+INDX,
+					(void) put(3, O_RV | bn << (8+INDX),
 						(int)p->value[0], w);
 				}
 #			    endif /*OBJ*/
