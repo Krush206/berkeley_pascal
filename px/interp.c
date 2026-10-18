@@ -44,6 +44,8 @@ static char sccsid[] = "@(#)interp.c	8.1 (Berkeley) 6/6/93";
 #include "machdep.h"
 #include "pxvars.h"
 #include "px.h"
+#pragma GCC diagnostic ignored "-Wsequence-point"
+#include "px.h"
 
 //#define DO_TRACE		//enable local execution tracing
 #if defined(DO_TRACE)
@@ -525,12 +527,12 @@ asm("_loopaddr:");
 				stp = _dp->stp;
 			}
 			/* pop locals, stack frame, parms, and return values */
-			popsp((long)((signed char *)stp->tos - pushsp((long)(0))));
+			popsp((long)((char *)stp->tos - (char *)pushsp((long)(0))));
 			continue;
 		case O_LINO:		/* set line number, count statements */
-			if (_dp->stp->tos != pushsp((long)(0)))
-				ERROR("Panic: stack not empty between statements tos:%04d sp:%04d lineno:%ld\n",
-				_dp->stp->tos, pushsp((long)(0)), _lino);
+			if ((char *)_dp->stp->tos != (char *)pushsp((long)(0)))
+				ERROR("Panic: stack not empty between statements tos:%ld sp:%ld lineno:%ld\n",
+				(long) _dp->stp->tos, (long) pushsp((long)(0)), _lino);
 			_lino = *pc.cp++;		/* set line number */
 			if (_lino == 0)
 				_lino = *pc.sp++;
@@ -622,7 +624,7 @@ asm("_loopaddr:");
 				tb = RELSGE(tl, tcp + tl1, tcp);
 				break;
 			default:
-				ERROR("Panic: bad relation %d to RELG*\n", tl2);
+				ERROR("Panic: bad relation %ld to RELG*\n", (long) tl2);
 				break;
 			}
 			popsp(tl1 << 1);
@@ -652,7 +654,7 @@ asm("_loopaddr:");
 				tb = RELTGE(tl1, LONG_CAST(tcp + tl1), LONG_CAST(tcp));
 				break;
 			default:
-				ERROR("Panic: bad relation %d to RELT*\n", tl2);
+				ERROR("Panic: bad relation %ld to RELT*\n", (long) tl2);
 				break;
 			}
 			STACKALIGN(tl, tl1);
@@ -1044,6 +1046,8 @@ asm("_loopaddr:");
 		case O_NEG8:
 			pc.cp++;
 			td = -pop8();
+			if (td == 0.0)
+				td = 0.0;		/* normalize -0.0 to 0.0 */
 			push8(td);
 			continue;
 		case O_DIV2:
