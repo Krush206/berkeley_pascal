@@ -83,7 +83,7 @@ flvalue( r , formalp )
 			return NLNIL;
 		    }
 #		    ifdef OBJ
-			(void) put(2, PTR_RV | bn << 8+INDX, (int)p->value[NL_OFFS]);
+			(void) put(2, PTR_RV | bn << (8+INDX), (int)p->value[NL_OFFS]);
 #		    endif /*OBJ*/
 #		    ifdef PC
 			putRV( p -> symbol , bn , p -> value[ NL_OFFS ] , 
@@ -108,7 +108,7 @@ flvalue( r , formalp )
 			 */
 		    tempnlp = tmpalloc((long) (sizeof(struct formalrtn)), NLNIL, NOREG);
 #		    ifdef OBJ
-			(void) put(2 , O_LV | cbn << 8 + INDX ,
+			(void) put(2 , O_LV | cbn << (8+INDX) ,
 				(int)tempnlp -> value[ NL_OFFS ] );
 			(void) put(2, O_FSAV | bn << 8, (long)p->value[NL_ENTLOC]);
 #		    endif /*OBJ*/
