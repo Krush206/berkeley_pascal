@@ -292,7 +292,7 @@ withop(s)
 		     *	but we use its runtime location for the with pointer.
 		     */
 #ifdef OBJ
-		(void) put(2, O_LV | cbn <<8+INDX, tempnlp -> value[ NL_OFFS ] );
+		(void) put(2, O_LV | cbn << (8+INDX), tempnlp -> value[ NL_OFFS ] );
 #endif /*OBJ*/
 #ifdef PC
 		putRV( (char *) 0 , cbn , tempnlp -> value[ NL_OFFS ] ,
@@ -362,7 +362,7 @@ asgnop(r)
 				return;
 			}
 #ifdef OBJ
-			    (void) put(2, O_LV | bn << 8+INDX, (int)p->value[NL_OFFS]);
+			    (void) put(2, O_LV | bn << (8+INDX), (int)p->value[NL_OFFS]);
 			    if (isa(p->type, "i") && width(p->type) == 1)
 				    (void) asgnop1(r, nl+T2INT);
 			    else
