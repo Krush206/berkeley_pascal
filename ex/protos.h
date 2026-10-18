@@ -9,6 +9,8 @@
 # define __P(s) ()
 #endif
 
+#include <stdarg.h>
+
 #if defined(__WATCOMC__)
 #pragma disable_message(107)  // Missing return value for function 'xxx'
 #pragma disable_message(131)  // No prototype found for function 'xxx'
