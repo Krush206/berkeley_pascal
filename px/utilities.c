@@ -99,12 +99,12 @@ skipprof:
 
 #if defined(unix)
 	fprintf(stderr,
-		"\n%1ld statements executed in %d.%02d seconds cpu time.\n",
-		_stcnt, ru.ru_utime.tv_sec, ru.ru_utime.tv_usec / 10000);
+		"\n%1ld statements executed in %ld.%02ld seconds cpu time.\n",
+		_stcnt, (long) ru.ru_utime.tv_sec, (long) ru.ru_utime.tv_usec / 10000);
 #else
 	fprintf(stderr,
-		"\n%1ld statements executed in %d.%02d seconds cpu time.\n",
-		_stcnt, ru / CLOCKS_PER_SEC, ru % CLOCKS_PER_SEC);
+		"\n%1ld statements executed in %ld.%02ld seconds cpu time.\n",
+		_stcnt, (long) ru / CLOCKS_PER_SEC, (long) ru % CLOCKS_PER_SEC);
 #endif
 	fflush(stderr);
 }
@@ -137,7 +137,7 @@ px_backtrace(type)
 		i = linum - (((ap)->entry)->offset & 0177777);
 		fprintf(stderr,"%s\"",(ap->entry)->name);
 		if (_nodump == FALSE)
-			fprintf(stderr,"+%d near line %d.",i,linum);
+			fprintf(stderr,"+%ld near line %ld.",i,linum);
 		fputc('\n',stderr);
 		*mydp = (ap)->odisp;
 		if (mydp <= &_display.frame[1]){
@@ -160,9 +160,14 @@ void
 px_liberr(signum)
 	int signum;
 {
+	register struct blockmark *ap;
+	register long i;
 
 	(void) signum;
-	px_backtrace("Library error");
+	ap = _dp->stp;
+	i = _lino - (((ap)->entry)->offset & 0177777);
+	fprintf(stderr, "\n\tError in \"%s\"+%ld near line %ld.\n",
+		(ap->entry)->name, i, _lino);
 	px_exit(2);
 }
 
