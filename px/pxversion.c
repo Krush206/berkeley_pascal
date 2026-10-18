@@ -54,7 +54,7 @@ static char sccsid[] = "@(#)version.c	8.1 (Berkeley) 6/6/93";
      *	onto standard output.
      *	useful for making Version.c to give the creation date for px.
      */
-void
+int
 main()
 {
 	time_t t = time(NULL);
