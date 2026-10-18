@@ -76,7 +76,7 @@ yylex()
 		copy((char *) &Y, (char *) &Yla[yylacnt], sizeof Y);
 		return (yychar);
 	}
-	if (c = yysavc)
+	if ((c = yysavc))
 		yysavc = 0;
 	else
 		c = readch();
@@ -224,7 +224,7 @@ infpnumb:
 				do {
 					c = readch();
 					if (c == '\n') {
-						yerror("Unmatched %c for string", (char *) delim);
+						yerror("Unmatched %c for string", delim);
 						if (cp == token)
 							*cp++ = ' ', cp++;
 						break;
@@ -332,7 +332,7 @@ nonterm:
 			if ( opt('s') ) {
 			    yyset();
 			    standard();
-			    yerror("%c is non-standard", (char *) c);
+			    yerror("%c is non-standard", c);
 			}
 			return c;
 		default:
