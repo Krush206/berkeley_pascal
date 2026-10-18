@@ -77,7 +77,7 @@ static char sccsid[] = "@(#)pmerge.c	8.1 (Berkeley) 6/6/93";
 #define FALSE 0
 #define MAXINCL 9
 #define MAXNAM 75
-#define TMPNAME "/usr/tmp/MGXXXXXX"
+#define TMPNAME "/tmp/MGXXXXXX"
 
 FILE	*files[NUMFILES];
 char	*names[NUMFILES];
@@ -106,6 +106,20 @@ onintr(int unused)
  * Program to merge separately compiled pascal modules into a
  * single standard Pascal program.
  */
+static char *
+pmktemp(void)
+{
+	char *t = strdup(TMPNAME);
+	int fd = mkstemp(t);
+
+	if (fd < 0) {
+		free(t);
+		return (NULL);
+	}
+	close(fd);
+	return (t);
+}
+
 int main(argc, argv)
 	long argc;
 	char **argv;
@@ -134,15 +148,15 @@ int main(argc, argv)
 	signal(SIGINT, onintr);
 
 	curfile = files[PRGFILE] =
-		fopen(names[PRGFILE] = mktemp(strdup(TMPNAME)), "w");
+		fopen(names[PRGFILE] = pmktemp(), "w");
 	files[LABELFILE] =
-		fopen(names[LABELFILE] = mktemp(strdup(TMPNAME)), "w");
+		fopen(names[LABELFILE] = pmktemp(), "w");
 	files[CONSTFILE] =
-		fopen(names[CONSTFILE] = mktemp(strdup(TMPNAME)), "w");
-	files[TYPEFILE] = fopen(names[TYPEFILE] = mktemp(strdup(TMPNAME)), "w");
-	files[VARFILE] = fopen(names[VARFILE] = mktemp(strdup(TMPNAME)), "w");
-	files[RTNFILE] = fopen(names[RTNFILE] = mktemp(strdup(TMPNAME)), "w");
-	files[BODYFILE] = fopen(names[BODYFILE] = mktemp(strdup(TMPNAME)), "w");
+		fopen(names[CONSTFILE] = pmktemp(), "w");
+	files[TYPEFILE] = fopen(names[TYPEFILE] = pmktemp(), "w");
+	files[VARFILE] = fopen(names[VARFILE] = pmktemp(), "w");
+	files[RTNFILE] = fopen(names[RTNFILE] = pmktemp(), "w");
+	files[BODYFILE] = fopen(names[BODYFILE] = pmktemp(), "w");
 
 	for (i = 0; i < NUMFILES; i++)
 		if (files[i] == NULL)
