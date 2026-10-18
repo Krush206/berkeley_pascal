@@ -62,6 +62,15 @@
 #else
 #include <stat.h>
 #endif
+#ifndef MAXBSIZE
+#define MAXBSIZE	1024	/* Maximum block size */
+#endif
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
 
 #if !defined(O_BINARY)
 #define O_BINARY
@@ -87,6 +96,25 @@
 #include <sgtty.h>
 #else
 #include "vmstty.h"
+#endif
+
+#if defined(__linux__) && !defined(TIOCGETP)
+/* TIOCGETP/TIOCSETP were removed from Linux; the legacy stty/gtty calls
+ * in ex_tty.c / ex_put.c still reference them. Define placeholders so the
+ * code compiles -- the ioctl will fail (ENOTTY) and callers already handle
+ * failure by using safe terminal defaults (ex is used non-interactively
+ * here for the pi parser-gram transformation). */
+# include <sys/ioctl.h>
+# if !defined(_IOC)
+#  define _IOC(dir,type,nr,size) ((((dir)  << 30) | ((size)  << 16) | ((type) << 8) | (nr)))
+#  define _IO(type,nr)           _IOC(_IOC_NONE,(type),(nr),0)
+# endif
+# ifndef TIOCGETP
+#  define TIOCGETP  _IO('t', 8)
+# endif
+# ifndef TIOCSETP
+#  define TIOCSETP  _IO('t', 9)
+# endif
 #endif
 #endif
 
