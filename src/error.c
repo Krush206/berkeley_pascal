@@ -43,7 +43,7 @@ static char sccsid[] = "@(#)error.c	8.1 (Berkeley) 6/6/93";
 #include <yy.h>
 #endif
 
-extern char	errpfx  = 'E';
+char	errpfx  = 'E';
 extern int	yyline;
 
 
