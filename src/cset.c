@@ -207,7 +207,7 @@ precset( r , settype , csetp )
 	pairp = NIL;
 	singp = NIL;
 	codeoff();
-	while ( el = r->cset_node.el_list ) {
+	while (( el = r->cset_node.el_list )) {
 		e = el->list_node.list;
 		if (e == NIL) {
 			    /*
