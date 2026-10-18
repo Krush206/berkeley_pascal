@@ -147,7 +147,10 @@
 #define pop4()                  (*stack.lp++)
 #define pop8()                  (*stack.dbp++)
 #define popsze8()               (*stack.s8p++)
-#define popsp(x)                (void)(stack.cp += (x))
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsequence-point"
+#define popsp(x)                do { stack.cp = (signed char *)((char *)stack.cp + (x)); } while (0)
+#pragma GCC diagnostic pop
 
 #define enableovrflo()          /*nop*/
 #define disableovrflo()         /*nop*/
