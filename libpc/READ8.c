@@ -197,8 +197,9 @@ readreal(curfile, doublep)
 		if (sequencep[-1] != '+' && sequencep[-1] != '-') {
 			PUSHBACK(curfile, sequencep);
 			SOME(read, filep, "%[0123456789]", sequencep);
-			if (!read)
+			if (!read) {
 				PUSHBACK(curfile, sequencep);
+			}
 			goto convert;
 		}
 		SOME(read, filep, "%[0123456789]", sequencep);
