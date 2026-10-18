@@ -247,7 +247,7 @@ int includ()
 	for (dp = cp; *dp != ch; dp++)
 		if (*dp == 0) {
 			line = yyline;
-			error("Missing closing %c for include file name - QUIT", (char *) ch);
+			error("Missing closing %c for include file name - QUIT", ch);
 			pexit(DIED);
 		}
 	*dp++ = 0;
