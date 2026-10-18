@@ -218,7 +218,7 @@ nogood:
 		    initnlp -> extra_flags , PCCT_INT );
 #	endif /*PC*/
 #	ifdef OBJ
-	    (void) put(2, O_LV | cbn<<8+INDX, initnlp -> value[ NL_OFFS ] );
+	    (void) put(2, O_LV | cbn<< (8+INDX), initnlp -> value[ NL_OFFS ] );
 #	endif /*OBJ*/
 	inittype = rvalue( init_node , fortype , RREQ );
 	if ( incompat( inittype , fortype , init_node ) ) {
@@ -245,7 +245,7 @@ nogood:
 		/*
 		 * compute and save the termination expression
 		 */
-	    (void) put(2, O_LV | cbn<<8+INDX, termnlp -> value[ NL_OFFS ] );
+	    (void) put(2, O_LV | cbn<< (8+INDX), termnlp -> value[ NL_OFFS ] );
 #	endif /*OBJ*/
 	termtype = rvalue( term_node , fortype , RREQ );
 	if ( incompat( termtype , fortype , term_node ) ) {
@@ -323,8 +323,8 @@ nogood:
 		/*
 		 * we can skip the loop altogether if !( init <= term )
 		 */
-	    (void) put(2, O_RV4 | cbn<<8+INDX, initnlp -> value[ NL_OFFS ] );
-	    (void) put(2, O_RV4 | cbn<<8+INDX, termnlp -> value[ NL_OFFS ] );
+	    (void) put(2, O_RV4 | cbn<< (8+INDX), initnlp -> value[ NL_OFFS ] );
+	    (void) put(2, O_RV4 | cbn<< (8+INDX), termnlp -> value[ NL_OFFS ] );
 	    (void) gen(TNONE, tree_node->tag == T_FORU ? T_LE : T_GE, sizeof(long),
 			sizeof(long));
 	    after = (int) getlab();
@@ -336,8 +336,8 @@ nogood:
 		 * is assignment compatible with the control-variable.
 		 */
 	    if (opt('t')) {
-		(void) put(2, O_LV | cbn<<8+INDX, shadownlp -> value[ NL_OFFS ] );
-		(void) put(2, O_RV4 | cbn<<8+INDX, termnlp -> value[ NL_OFFS ] );
+		(void) put(2, O_LV | cbn<< (8+INDX), shadownlp -> value[ NL_OFFS ] );
+		(void) put(2, O_RV4 | cbn<< (8+INDX), termnlp -> value[ NL_OFFS ] );
 		rangechk(fortype, nl+T4INT);
 		(void) gen(O_AS2, O_AS2, forwidth, sizeof(long));
 	    }
@@ -345,9 +345,8 @@ nogood:
 		 * assign the initial expression to the shadow
 		 * checking the assignment if necessary.
 		 */
-printf("sym=%s,%s\n", shadownlp->symbol, initnlp->symbol);
-	    (void) put(2, O_LV | cbn<<8+INDX, shadownlp -> value[ NL_OFFS ] );
-	    (void) put(2, O_RV4 | cbn<<8+INDX, initnlp -> value[ NL_OFFS ] );
+(void) put(2, O_LV | cbn<< (8+INDX), shadownlp -> value[ NL_OFFS ] );
+	    (void) put(2, O_RV4 | cbn<< (8+INDX), initnlp -> value[ NL_OFFS ] );
 	    rangechk(fortype, nl+T4INT);
 	    (void) gen(O_AS2, O_AS2, forwidth, sizeof(long));
 		/*
@@ -447,8 +446,8 @@ printf("sym=%s,%s\n", shadownlp->symbol, initnlp->symbol);
 		 * and returning to the top of the loop.
 		 */
 	    putline();
-	    (void) put(2, O_RV4 | cbn<<8+INDX, termnlp -> value[ NL_OFFS ] );
-	    (void) put(2, O_LV | cbn<<8+INDX, shadownlp -> value[ NL_OFFS ] );
+	    (void) put(2, O_RV4 | cbn<< (8+INDX), termnlp -> value[ NL_OFFS ] );
+	    (void) put(2, O_LV | cbn<< (8+INDX), shadownlp -> value[ NL_OFFS ] );
 	    (void) put(2, (tree_node->tag == T_FORU ? O_FOR1U : O_FOR1D) + (forwidth >> 1),
 		    again);
 		/*
